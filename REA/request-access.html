@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar Acesso - RAE</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <header class="login-header">
+            <div class="header-content">
+                <h1>RAE</h1>
+                <p>Solicitação de Acesso</p>
+            </div>
+        </header>
+
+        <main class="login-main">
+            <div class="login-form">
+                <div class="section-header">
+                    <i class="fas fa-user-plus"></i>
+                    <h2>Nova Conta</h2>
+                </div>
+                <p style="margin-bottom: 24px; font-size: 14px; color: var(--text-muted);">Preencha os campos abaixo para solicitar seu acesso à Rede de Apoio Escolar.</p>
+                
+                <form id="requestAccessForm" novalidate>
+                    <div id="requestMessageContainer" class="message-banner" style="display: none; margin-bottom: 20px;"></div>
+                    <div class="form-group">
+                        <label for="full-name">Nome Completo</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-id-card" aria-hidden="true"></i>
+                            <input 
+                                type="text" 
+                                id="full-name" 
+                                name="full-name"
+                                placeholder="Seu nome completo" 
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-id">CPF ou Matrícula</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                            <input 
+                                type="text" 
+                                id="reg-id" 
+                                name="reg-id"
+                                placeholder="000.000.000-00" 
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-email">E-mail Institucional</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope" aria-hidden="true"></i>
+                            <input 
+                                type="email" 
+                                id="reg-email" 
+                                name="reg-email"
+                                placeholder="exemplo@educ.gov.br" 
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-login">
+                        <span class="btn-text">Solicitar Cadastro</span>
+                    </button>
+                </form>
+
+                <div class="divider">
+                    <span>ou</span>
+                </div>
+
+                <a href="index.html" class="btn-gov" style="text-decoration: none;">
+                    <i class="fas fa-arrow-left"></i>
+                    Voltar para o Login
+                </a>
+            </div>
+
+            <footer class="login-footer">
+                <p>Já tem uma conta? <a href="index.html">Entre agora</a></p>
+            </footer>
+        </main>
+    </div>
+    <script src="script.js"></script>
+    <div class="theme-toggle">
+        <button id="themeToggleBtn" class="btn-theme" aria-label="Alternar modo claro/escuro">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+</body>
+</html>

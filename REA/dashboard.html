@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Auxilia Escola</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <button class="btn-logout" id="logoutBtn" aria-label="Sair">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+                <h1>RAE</h1>
+                <p id="welcomeMessage">Rede de Apoio Escolar</p>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <!-- Navegação por Abas (Horizontal Scrollable Mobile) -->
+            <nav class="tabs-nav">
+                <button class="tab-btn active" data-tab="home">
+                    <i class="fas fa-home"></i>
+                    <span>Início</span>
+                </button>
+                <button class="tab-btn" data-tab="menu">
+                    <i class="fas fa-utensils"></i>
+                    <span>Cardápio</span>
+                </button>
+                <button class="tab-btn" data-tab="todo">
+                    <i class="fas fa-tasks"></i>
+                    <span>Tarefas</span>
+                </button>
+                <button class="tab-btn bibliotecaria-field student-field" data-tab="library" style="display: none;">
+                    <i class="fas fa-book"></i>
+                    <span>Biblioteca</span>
+                </button>
+                <button class="tab-btn colaborador-field teacher-field" data-tab="absences" style="display: none;">
+                    <i class="fas fa-calendar-check"></i>
+                    <span class="btn-text">Faltas</span>
+                </button>
+
+                <button class="tab-btn" data-tab="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Perfil</span>
+                </button>
+            </nav>
+
+            <div class="tab-content">
+                <!-- Seção de Início (Home) -->
+                <section id="home" class="tab-pane active">
+                    <div class="section-header">
+                        <h2>Resumo do Dia</h2>
+                    </div>
+                    <div class="home-grid">
+                        <div class="summary-card" id="todayMenuSummary">
+                            <i class="fas fa-utensils"></i>
+                            <div>
+                                <h3>Cardápio de Hoje</h3>
+                                <p id="todayMealText">Carregando...</p>
+                            </div>
+                        </div>
+                        <div class="summary-card" id="todoSummary">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h3>Suas Tarefas</h3>
+                                <p id="todoCountText">Você tem 0 tarefas pendentes.</p>
+                            </div>
+                        </div>
+                        <div class="summary-card colaborador-field teacher-field" id="absencesSummary" style="display: none; cursor: pointer;">
+                            <i class="fas fa-user-check"></i>
+                            <div>
+                                <h3>Controle de Faltas</h3>
+                                <p id="absencesSummaryText">Clique para registrar faltas diárias.</p>
+                            </div>
+                        </div>
+
+                        <!-- Card de Livros (Bibliotecária) -->
+                        <div class="summary-card bibliotecaria-field" id="booksSummary" style="display: none; cursor: pointer;">
+                            <i class="fas fa-book-reader"></i>
+                            <div>
+                                <h3>Gestão de Livros</h3>
+                                <p>Verificar empréstimos</p>
+                            </div>
+                        </div>
+                        <div class="summary-card student-field" id="frequencySummary">
+                            <i class="fas fa-chart-bar"></i>
+                            <div>
+                                <h3>Frequência Geral</h3>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill" style="width: 95%;"></div>
+                                    </div>
+                                    <span class="progress-label" id="frequencyLabel">95%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-banner" id="eventBanner">
+                            <i class="fas fa-calendar-alt"></i>
+                            <p id="eventText">Carregando evento...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Seção de Cardápio Semanal -->
+                <section id="menu" class="tab-pane">
+                    <div class="section-header">
+                        <h2>Cardápio da Semana</h2>
+                    </div>
+                    <div class="menu-grid" id="menuGrid">
+                        <!-- Cards do cardápio serão gerados via JS para permitir edição -->
+                    </div>
+                    <!-- Botão de Edição (Apenas Professor) -->
+                    <button id="btnEditMenu" class="btn-edit-profile teacher-field" style="display: none; margin-top: 20px;">
+                        <i class="fas fa-utensils"></i> Editar Cardápio
+                    </button>
+                </section>
+
+                <!-- Seção de Lista de Afazeres -->
+                <section id="todo" class="tab-pane">
+                    <div class="section-header">
+                        <h2>Minha Lista de Afazeres</h2>
+                    </div>
+                    <div class="todo-container">
+                        <form id="todoForm" class="todo-form">
+                            <input type="text" id="todoInput" placeholder="Adicionar nova tarefa..." aria-label="Nova tarefa">
+                            <button type="submit" class="btn-add-todo" aria-label="Adicionar">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </form>
+                        <ul id="todoList" class="todo-list">
+                            <!-- Tarefas serão inseridas aqui via JS -->
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Seção de Perfil -->
+                <section id="profile" class="tab-pane">
+                    <div class="section-header">
+                        <h2>Meu Perfil</h2>
+                    </div>
+                    <div class="profile-container">
+                        <div class="profile-header">
+                            <div class="profile-avatar" id="profileAvatarContainer">
+                                <i class="fas fa-user-graduate" id="defaultAvatarIcon"></i>
+                                <img id="profileImageDisplay" src="" alt="Foto de Perfil" style="display: none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            </div>
+                            <h3 id="profileName">Estudante RAE</h3>
+                            <p id="profileEmail">estudante@rae.com.br</p>
+                        </div>
+                        <div class="profile-info-list">
+                            <!-- Campos de Aluno (visíveis por padrão) -->
+                            <div class="info-item student-field">
+                                <span class="info-label">Matrícula:</span>
+                                <span class="info-value" id="profileRegistration"></span>
+                            </div>
+                            <div class="info-item student-field">
+                                <span class="info-label">Escola:</span>
+                                <span class="info-value" id="profileSchool">Escola RAE</span>
+                            </div>
+                            <div class="info-item student-field">
+                                <span class="info-label">Curso:</span>
+                                <span class="info-value" id="profileCourse"></span>
+                            </div>
+                            <div class="info-item student-field">
+                                <span class="info-label">Turma:</span>
+                                <span class="info-value" id="profileClass"></span>
+                            </div>
+
+                            <!-- Campos de Professor (escondidos por padrão) -->
+                            <div class="info-item teacher-field" style="display: none;">
+                                <span class="info-label">ID Funcional:</span>
+                                <span class="info-value" id="teacherId"></span>
+                            </div>
+                            <div class="info-item teacher-field" style="display: none;">
+                                <span class="info-label">Matéria:</span>
+                                <span class="info-value" id="teacherSubject"></span>
+                            </div>
+                            <div class="info-item teacher-field schools-list" style="display: none;">
+                                <span class="info-label">Leciona em:</span>
+                                <div class="info-value" id="teacherSchools"></div>
+                            </div>
+
+                            <div class="info-item">
+                                <span class="info-label">Status:</span>
+                                <span class="info-value status-active">Ativo</span>
+                            </div>
+                        </div>
+                        <button id="openEditProfileBtn" class="btn-edit-profile">
+                            <i class="fas fa-edit"></i> Editar Perfil
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Seção de Biblioteca (Bibliotecária e Aluno) -->
+                <section id="library" class="tab-pane bibliotecaria-field student-field" style="display: none;">
+                    <!-- Visualização da Bibliotecária (Seleção de Salas) -->
+                    <div id="libraryLibrarianView" class="bibliotecaria-field" style="display: none; width: 100%;">
+                        <div id="libraryClassroomSelection">
+                            <div class="library-header-ui">
+                                <div class="lib-header-content">
+                                    <h2><i class="fas fa-book-reader"></i> Sistema de Biblioteca</h2>
+                                    <p>Gerencie empréstimos e devoluções de livros</p>
+                                </div>
+                            </div>
+                            
+                            <div class="search-container">
+                                <div class="search-box">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" id="librarySearchInput" placeholder="Pesquisar por sala...">
+                                </div>
+                            </div>
+
+                            <div class="absences-container" style="width: 100%; display: flex; flex-direction: column; gap: 24px;">
+                                <!-- Bloco Turno Manhã -->
+                                <div class="shift-block">
+                                    <h3 class="shift-title"><i class="fas fa-sun"></i> Turno Manhã</h3>
+                                    <div class="absences-grid-years">
+                                        <div class="year-column">
+                                            <h4>1º Anos</h4>
+                                            <div class="class-list">
+                                                <div class="class-card clickable-library-class" data-class="1A"><span>1A</span></div>
+                                                <div class="class-card clickable-library-class" data-class="1B"><span>1B</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="year-column">
+                                            <h4>2º Anos</h4>
+                                            <div class="class-list">
+                                                <div class="class-card clickable-library-class" data-class="2A"><span>2A</span></div>
+                                                <div class="class-card clickable-library-class" data-class="2B"><span>2B</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="year-column">
+                                            <h4>3º Anos</h4>
+                                            <div class="class-list">
+                                                <div class="class-card clickable-library-class" data-class="3A"><span>3A</span></div>
+                                                <div class="class-card clickable-library-class" data-class="3B"><span>3B</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bloco Turno Tarde -->
+                                <div class="shift-block">
+                                    <h3 class="shift-title"><i class="fas fa-cloud-sun"></i> Turno Tarde</h3>
+                                    <div class="absences-grid-years">
+                                        <div class="year-column">
+                                            <h4>1º Anos</h4>
+                                            <div class="class-list">
+                                                <div class="class-card clickable-library-class" data-class="1C"><span>1C</span></div>
+                                                <div class="class-card clickable-library-class" data-class="1D"><span>1D</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="year-column">
+                                            <h4>2º Anos</h4>
+                                            <div class="class-list">
+                                                <div class="class-card clickable-library-class" data-class="2C"><span>2C</span></div>
+                                                <div class="class-card clickable-library-class" data-class="2D"><span>2D</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="year-column">
+                                            <h4>3º Anos</h4>
+                                            <div class="class-list">
+                                                <div class="class-card clickable-library-class" data-class="3C"><span>3C</span></div>
+                                                <div class="class-card clickable-library-class" data-class="3D"><span>3D</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bloco Turno Noite -->
+                                <div class="shift-block">
+                                    <h3 class="shift-title"><i class="fas fa-moon"></i> Turno Noite</h3>
+                                    <div class="absences-grid-years">
+                                        <div class="year-column">
+                                            <h4>1º Anos</h4>
+                                            <div class="class-list">
+                                                <div class="class-card clickable-library-class" data-class="1E"><span>1E</span></div>
+                                                <div class="class-card clickable-library-class" data-class="1F"><span>1F</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="year-column">
+                                            <h4>2º Anos</h4>
+                                            <div class="class-list">
+                                                <div class="class-card clickable-library-class" data-class="2E"><span>2E</span></div>
+                                                <div class="class-card clickable-library-class" data-class="2F"><span>2F</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="year-column">
+                                            <h4>3º Anos</h4>
+                                            <div class="class-list">
+                                                <div class="class-card clickable-library-class" data-class="3E"><span>3E</span></div>
+                                                <div class="class-card clickable-library-class" data-class="3F"><span>3F</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel de Alunos para Biblioteca -->
+                        <div id="libraryStudentListPanel" style="display: none; width: 100%;">
+                            <div class="lib-panel-header">
+                                <button id="backToLibraryClasses" class="lib-btn-back">
+                                    <i class="fas fa-chevron-left"></i> Voltar
+                                </button>
+                                <h2 id="libraryCurrentClassTitle">Sala 3B</h2>
+                            </div>
+                            
+                            <div class="library-student-list" id="libraryStudentCatalog">
+                                <!-- Alunos serão inseridos aqui via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visualização do Aluno (Histórico de Empréstimos) -->
+                    <div id="libraryStudentView" class="student-field" style="display: none; width: 100%;">
+                        <div class="section-header">
+                            <h2>Meus Empréstimos</h2>
+                        </div>
+                        <div id="loanHistoryList" style="display: flex; flex-direction: column; gap: 15px;">
+                            <!-- Histórico inserido via JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Seção de Faltas (Somente Colaborador) -->
+                <section id="absences" class="tab-pane colaborador-field teacher-field" style="display: none;">
+                    <div id="classroomSelection">
+                        <div class="section-header">
+                            <h2>Registro de Faltas Diárias</h2>
+                        </div>
+                        <div class="absences-container" style="width: 100%; display: flex; flex-direction: column; gap: 24px;">
+                            <!-- Bloco Turno Manhã -->
+                            <div class="shift-block">
+                                <h3 class="shift-title"><i class="fas fa-sun"></i> Turno Manhã</h3>
+                                <div class="absences-grid-years">
+                                    <div class="year-column">
+                                        <h4>1º Anos</h4>
+                                        <div class="class-list">
+                                            <div class="class-card clickable-class" data-class="1A"><span>1A</span></div>
+                                            <div class="class-card clickable-class" data-class="1B"><span>1B</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="year-column">
+                                        <h4>2º Anos</h4>
+                                        <div class="class-list">
+                                            <div class="class-card clickable-class" data-class="2A"><span>2A</span></div>
+                                            <div class="class-card clickable-class" data-class="2B"><span>2B</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="year-column">
+                                        <h4>3º Anos</h4>
+                                        <div class="class-list">
+                                            <div class="class-card clickable-class" data-class="3A"><span>3A</span></div>
+                                            <div class="class-card clickable-class" data-class="3B"><span>3B</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bloco Turno Tarde -->
+                            <div class="shift-block">
+                                <h3 class="shift-title"><i class="fas fa-cloud-sun"></i> Turno Tarde</h3>
+                                <div class="absences-grid-years">
+                                    <div class="year-column">
+                                        <h4>1º Anos</h4>
+                                        <div class="class-list">
+                                            <div class="class-card clickable-class" data-class="1C"><span>1C</span></div>
+                                            <div class="class-card clickable-class" data-class="1D"><span>1D</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="year-column">
+                                        <h4>2º Anos</h4>
+                                        <div class="class-list">
+                                            <div class="class-card clickable-class" data-class="2C"><span>2C</span></div>
+                                            <div class="class-card clickable-class" data-class="2D"><span>2D</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="year-column">
+                                        <h4>3º Anos</h4>
+                                        <div class="class-list">
+                                            <div class="class-card clickable-class" data-class="3C"><span>3C</span></div>
+                                            <div class="class-card clickable-class" data-class="3D"><span>3D</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bloco Turno Noite -->
+                            <div class="shift-block">
+                                <h3 class="shift-title"><i class="fas fa-moon"></i> Turno Noite</h3>
+                                <div class="absences-grid-years">
+                                    <div class="year-column">
+                                        <h4>1º Anos</h4>
+                                        <div class="class-list">
+                                            <div class="class-card clickable-class" data-class="1E"><span>1E</span></div>
+                                            <div class="class-card clickable-class" data-class="1F"><span>1F</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="year-column">
+                                        <h4>2º Anos</h4>
+                                        <div class="class-list">
+                                            <div class="class-card clickable-class" data-class="2E"><span>2E</span></div>
+                                            <div class="class-card clickable-class" data-class="2F"><span>2F</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="year-column">
+                                        <h4>3º Anos</h4>
+                                        <div class="class-list">
+                                            <div class="class-card clickable-class" data-class="3E"><span>3E</span></div>
+                                            <div class="class-card clickable-class" data-class="3F"><span>3F</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Painel de Alunos (Escondido por padrão) -->
+                    <div id="studentListPanel" style="display: none; width: 100%;">
+                        <div class="section-header">
+                            <button id="backToClasses" class="btn-back" style="background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 18px; margin-right: 10px;">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <h2 id="currentClassTitle">Sala 3B</h2>
+                        </div>
+                        
+                        <div class="student-catalog" id="studentCatalog" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+                            <!-- Alunos serão inseridos aqui via JS -->
+                        </div>
+
+                        <div id="absencesMessageContainer" class="message-banner" style="display: none; margin-bottom: 20px;"></div>
+
+                        <button id="saveAbsencesBtn" class="btn-save-profile">
+                            <i class="fas fa-save"></i> Salvar Chamada
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Edição de Perfil -->
+    <div id="editProfileModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Editar Perfil</h2>
+                <button id="closeModalBtn" class="btn-close-modal">&times;</button>
+            </div>
+            <form id="editProfileForm" class="modal-form">
+                <div id="profileMessageContainer" class="message-banner" style="display: none; margin-bottom: 20px;"></div>
+                
+                <div class="form-group avatar-upload-group" style="text-align: center; margin-bottom: 24px;">
+                    <div class="edit-avatar-preview">
+                        <img id="editAvatarPreview" src="" alt="Nova Foto" style="display: none; width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid var(--primary-color);">
+                        <i class="fas fa-user-circle" id="editAvatarIcon" style="font-size: 80px; color: var(--text-placeholder);"></i>
+                    </div>
+                    <label for="avatarInput" class="btn-upload-photo" style="margin-top: 12px; display: inline-block; cursor: pointer; color: var(--primary-color); font-weight: 600;">
+                        <i class="fas fa-camera"></i> Alterar Foto
+                    </label>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                </div>
+
+                <div class="form-group">
+                    <label for="editName">Nome Completo (Bloqueado)</label>
+                    <input type="text" id="editName" placeholder="Seu nome" required disabled>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">E-mail</label>
+                    <input type="email" id="editEmail" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="editClass">Turma (Bloqueada)</label>
+                    <input type="text" id="editClass" placeholder="Sua turma" required disabled>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-save-profile">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Edição de Cardápio (Apenas Professor) -->
+    <div id="editMenuModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Editar Cardápio</h2>
+                <button id="closeMenuModalBtn" class="btn-close-modal">&times;</button>
+            </div>
+            <form id="editMenuForm" class="modal-form">
+                <div id="menuMessageContainer" class="message-banner" style="display: none; margin-bottom: 20px;"></div>
+                <div class="form-group">
+                    <label for="editSeg">Segunda-feira</label>
+                    <input type="text" id="editSeg" required>
+                </div>
+                <div class="form-group">
+                    <label for="editTer">Terça-feira</label>
+                    <input type="text" id="editTer" required>
+                </div>
+                <div class="form-group">
+                    <label for="editQua">Quarta-feira</label>
+                    <input type="text" id="editQua" required>
+                </div>
+                <div class="form-group">
+                    <label for="editQui">Quinta-feira</label>
+                    <input type="text" id="editQui" required>
+                </div>
+                <div class="form-group">
+                    <label for="editSex">Sexta-feira</label>
+                    <input type="text" id="editSex" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-save-profile">Salvar Cardápio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <div class="theme-toggle">
+        <button id="themeToggleBtn" class="btn-theme" aria-label="Alternar modo claro/escuro">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+</body>
+</html>
